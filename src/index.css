@@ -54,6 +54,21 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.TodoContainer{
+  display: inline-flex;
+  flex-wrap: wrap;  
+  gap: 10px;
+  margin: 5px;
+}
+
+.Note{
+  border: solid 1px black;
+  border-radius: 10%;
+  padding: 5px;
+  width: 150px;
+  height: 150px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
+import Note from "./Note";
+import Header from "./Header";
 
 function App() {
-  const [count, setCount] = useState(0)
+  interface NoteProps {
+    title: string;
+    description: string;
+    date: string;
+  }
+  const [notes, setNotes] = useState<NoteProps[]>([]);
+
+  useEffect(() => {
+    LoadTodos();
+  }, []);
+
+  useEffect(() => {
+    SaveTodos(notes);
+  }, [notes]);
+
+  const addNote = (title: string, description: string, date: string) => {
+    setNotes([
+      ...notes,
+      { title: title, description: description, date: date },
+    ]);
+    console.log(notes);
+  };
+
+  const deleteNote = () => {};
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Header buttonFunction={addNote} />
+      <div className="TodoContainer">
+        {notes.map((value, index) => (
+          <Note
+            key={index}
+            title={value.title}
+            description={value.description}
+            date={value.date}
+          />
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count * 2)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
+
+  function SaveTodos(notes: NoteProps[]) {
+    notes.length != 0
+      ? localStorage.setItem("notes", JSON.stringify(notes))
+      : 0;
+  }
+
+  function LoadTodos() {
+    let notes: NoteProps[] | null = null;
+    const fileContent: string | null = localStorage.getItem("notes");
+    if (fileContent != null) {
+      notes = JSON.parse(fileContent);
+    }
+    if (notes != null) {
+      setNotes(notes);
+    }
+    console.log("Loaded");
+  }
 }
 
-export default App
+export default App;
