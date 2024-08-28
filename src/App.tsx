@@ -5,62 +5,83 @@ import Header from "./Header";
 
 function App() {
   interface NoteProps {
+    id: number;
     title: string;
     description: string;
     date: string;
+    deleteFunction(id: number): void;
   }
   const [notes, setNotes] = useState<NoteProps[]>([]);
+  const [id, setId] = useState(0);
 
   useEffect(() => {
+    const LoadTodos = () => {
+      let num: number = id;
+      const fileContent: string | null = localStorage.getItem("notes");
+      if (fileContent) {
+        const loadedNotes: NoteProps[] = JSON.parse(fileContent);
+        if (loadedNotes && loadedNotes.length !== 0) {
+          setNotes(loadedNotes);
+          num = setHighestId(loadedNotes);
+        }
+      }
+
+      console.log("Loaded\nHighest Id is:");
+      console.log(num);
+    };
     LoadTodos();
   }, []);
 
   useEffect(() => {
+    const SaveTodos = (notes: NoteProps[]) => {
+      localStorage.setItem("notes", JSON.stringify(notes));
+    };
     SaveTodos(notes);
   }, [notes]);
 
   const addNote = (title: string, description: string, date: string) => {
+    const newid: number = id + 1;
+    setId(newid);
     setNotes([
       ...notes,
-      { title: title, description: description, date: date },
+      {
+        id: newid,
+        title: title,
+        description: description,
+        date: date,
+        deleteFunction: () => DeleteNote(newid),
+      },
     ]);
     console.log(notes);
   };
 
-  const deleteNote = () => {};
+  function DeleteNote(id: number) {
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
+  }
 
   return (
     <>
       <Header buttonFunction={addNote} />
       <div className="TodoContainer">
-        {notes.map((value, index) => (
+        {notes.map((note) => (
           <Note
-            key={index}
-            title={value.title}
-            description={value.description}
-            date={value.date}
+            id={note.id}
+            key={note.id}
+            title={note.title}
+            description={note.description}
+            date={note.date}
+            deleteFunction={DeleteNote}
           />
         ))}
       </div>
     </>
   );
 
-  function SaveTodos(notes: NoteProps[]) {
-    notes.length != 0
-      ? localStorage.setItem("notes", JSON.stringify(notes))
-      : 0;
-  }
-
-  function LoadTodos() {
-    let notes: NoteProps[] | null = null;
-    const fileContent: string | null = localStorage.getItem("notes");
-    if (fileContent != null) {
-      notes = JSON.parse(fileContent);
-    }
-    if (notes != null) {
-      setNotes(notes);
-    }
-    console.log("Loaded");
+  function setHighestId(notes: NoteProps[]) {
+    let num: number = Math.max(...notes.map((note) => note.id));
+    setId(num);
+    return num;
   }
 }
 
