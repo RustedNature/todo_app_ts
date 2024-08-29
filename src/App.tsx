@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import Note from "./Note";
-import Header from "./Header";
+import Note from "./components/Note";
+import Header from "./components/Header";
 
 function App() {
   interface NoteProps {
