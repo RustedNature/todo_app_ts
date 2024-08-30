@@ -11,7 +11,7 @@ function App() {
     date: Date;
   }
   const [notes, setNotes] = useState<NoteProps[]>([]);
-  const [id, setId] = useState(0);
+  const [id, setId] = useState<number>(0);
 
   useEffect(() => {
     const LoadTodos = () => {

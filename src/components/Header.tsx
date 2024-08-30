@@ -4,9 +4,9 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ buttonFunction }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [date, setDate] = useState<string>("");
 
   const headerStyle: React.CSSProperties = {
     border: "solid 1px gray",
