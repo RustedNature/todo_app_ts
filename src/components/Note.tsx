@@ -4,7 +4,7 @@ interface NoteProps {
   id: number;
   title: string;
   description: string;
-  date: string;
+  date: Date;
   deleteFunction: (id: number) => void;
 }
 
@@ -20,7 +20,7 @@ const Note: React.FC<NoteProps> = ({
       <button onClick={() => deleteFunction(id)}>Löschen</button>
       <h3>{title}</h3>
       <p>{description}</p>
-      <p>{date}</p>
+      <p>{new Date(date).toLocaleString()}</p>
     </div>
   );
 };

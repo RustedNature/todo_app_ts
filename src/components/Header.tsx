@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 interface HeaderProps {
-  buttonFunction: (title: string, description: string, date: string) => void;
+  buttonFunction: (title: string, description: string, date: Date) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ buttonFunction }) => {
@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ buttonFunction }) => {
   return (
     <div style={headerStyle}>
       <div style={inputStyle}>
-        <p>Titel</p>
+        <p>Title</p>
         <input
           type="text"
           value={title}
@@ -43,7 +43,9 @@ const Header: React.FC<HeaderProps> = ({ buttonFunction }) => {
         />
       </div>
       <div>
-        <button onClick={() => buttonFunction(title, description, date)}>
+        <button
+          onClick={() => buttonFunction(title, description, new Date(date))}
+        >
           Todo Hinzufügen
         </button>
       </div>
